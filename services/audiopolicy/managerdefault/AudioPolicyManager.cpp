@@ -6873,7 +6873,7 @@ status_t AudioPolicyManager::checkAndSetVolume(IVolumeCurves &curves,
                 if (bOrignalDeviceRemoved == true)
                     newConfig.ext.device.type = config->ext.device.type;
                 newConfig.config_mask = AUDIO_PORT_CONFIG_GAIN | newConfig.config_mask;
-                newConfig.gain.mode = VALUE_OR_RETURN_STATUS(aidl2legacy_int32_t_audio_gain_mode_t_mask(AUDIO_GAIN_MODE_JOINT | newConfig.gain.mode));
+                newConfig.gain.mode = static_cast<audio_gain_mode_t>(AUDIO_GAIN_MODE_JOINT | newConfig.gain.mode);
                 newConfig.gain.values[0] = index;   // pass volume index directly
                 if ((!(isSingleDeviceType(deviceTypes, newConfig.ext.device.type)) || bOrignalDeviceRemoved) && index != 0) // For switch and pop between hp and speaker
                     newConfig.ext.device.type = deviceTypesToBitMask(deviceTypes); // Device change, Don't un-mute, wait next createAudioPatch
@@ -7462,7 +7462,7 @@ status_t AudioPolicyManager::addAudioPatch(audio_patch_handle_t handle, const sp
             DeviceVector currentDevice = getNewOutputDevices(outputDesc, false /*fromCache*/);
             audio_devices_t patchDevice = patch->mPatch.sinks[0].ext.device.type;
             if (patch->mPatch.num_sinks == 2) {
-                patchDevice = VALUE_OR_RETURN_STATUS(aidl2legacy_int32_t_audio_devices_t(patchDevice | patch->mPatch.sinks[1].ext.device.type));
+                patchDevice = static_cast<audio_devices_t>(patchDevice | patch->mPatch.sinks[1].ext.device.type);
             }
             // It will auto correct the right routing device. Alarm stop before 80002000->0x0a
             setOutputDevices(outputDesc, currentDevice, !currentDevice.containsDeviceWithType(patchDevice));
