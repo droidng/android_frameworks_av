@@ -51,9 +51,4 @@ cc_library_shared {
         "-Werror",
     ],
 
-    product_variables: {
-        have_mtk_fm: {
-            cflags: ["-DHAVE_MTK_FM"],
-	},
-    },
 }
